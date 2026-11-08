@@ -25,11 +25,13 @@ def stereo_wave(audio: bytes) -> bytes:
                 source.getnchannels() != 1
                 or source.getsampwidth() != 2
                 or source.getframerate() != 48000
-                or not 0 < source.getnframes() <= MAX_FRAMES
             ):
                 raise HomeAssistantError("Expected mono 48 kHz PCM, up to 17 seconds")
-            frames = source.readframes(source.getnframes())
-            if len(frames) != source.getnframes() * 2:
+            # FFmpeg writes an unknown frame count when WAV is streamed on stdout.
+            frames = source.readframes(MAX_FRAMES + 1)
+            if not 0 < len(frames) <= MAX_FRAMES * 2 or len(frames) % 2:
+                raise HomeAssistantError("Expected speech audio up to 17 seconds")
+            if source.getnframes() not in (len(frames) // 2, 0xFFFFFFFF // 2):
                 raise HomeAssistantError("Incomplete speech audio")
     except (EOFError, wave.Error) as err:
         raise HomeAssistantError("Could not read the TTS audio as WAV") from err
