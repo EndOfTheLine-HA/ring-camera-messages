@@ -18,6 +18,29 @@ Assistant's TTS cache. Dynamic messages are generated on demand.
 For quiet presets, edit the message and set a volume boost from 0 to 18 dB.
 A limiter caps peaks, so the audible increase can be less than the selected gain.
 
+## Visual setup
+
+After installing through HACS and restarting Home Assistant, open
+**Settings → Devices & services → Add integration → Ring Camera Messages**.
+
+1. In **Connect Ring-MQTT**, keep the topic prefix as `ring` unless you changed
+   it in your bridge configuration. Select a text-to-speech provider and submit.
+
+   ![Connect Ring-MQTT form with the default ring topic prefix and text-to-speech provider picker](docs/screenshots/connect-ring-mqtt.png)
+
+2. After the integration connects, open **Configure → Add message**. Enter a
+   button name, select the camera that should speak, and enter your message.
+
+   ![Ring Camera Messages configuration menu with the Add message option](docs/screenshots/add-message-menu.png)
+
+3. Submit the message and select **Finish**. Open the new button entity and
+   press it to test playback before adding it to a dashboard.
+
+   ![Options saved confirmation and the newly created entity count](docs/screenshots/message-saved.png)
+
+For a dashboard card with a custom tap action, set the `button.press`
+target to the same message button entity shown on the card.
+
 ## Automations
 
 Use the **List cameras** action to find a stable camera ID. Pass it to
