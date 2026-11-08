@@ -8,6 +8,7 @@ import wave
 from uuid import uuid4
 
 from homeassistant.components import mqtt, tts
+from homeassistant.core import callback
 from homeassistant.exceptions import HomeAssistantError
 
 DOMAIN = "ring_camera_messages"
@@ -47,6 +48,7 @@ async def request(hass, prefix, operation, data):
     request_id = uuid4().hex
     future = hass.loop.create_future()
 
+    @callback
     def on_result(message):
         if future.done() or message.retain:
             return
@@ -58,11 +60,13 @@ async def request(hass, prefix, operation, data):
             future.set_result(result)
 
     topic = f"{prefix}/speaker/v1"
-    unsubscribe = await mqtt.async_subscribe(
-        hass, f"{topic}/result/{request_id}", on_result, qos=1
-    )
+    result_topic = f"{topic}/result/{request_id}"
+    subscribed = asyncio.Event()
+    unsubscribe = await mqtt.async_subscribe(hass, result_topic, on_result, qos=1)
+    stop_monitor = mqtt.async_on_subscribe_done(hass, result_topic, 1, subscribed.set)
     try:
         async with asyncio.timeout(8 if operation == "discover" else 40):
+            await subscribed.wait()
             await mqtt.async_publish(
                 hass,
                 f"{topic}/{operation}",
@@ -74,6 +78,7 @@ async def request(hass, prefix, operation, data):
     except TimeoutError as err:
         raise HomeAssistantError("Ring-MQTT did not reply. Check the bridge and MQTT.") from err
     finally:
+        stop_monitor()
         unsubscribe()
 
 
