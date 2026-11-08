@@ -21,5 +21,8 @@ class MessageButton(ButtonEntity):
 
     async def async_press(self):
         await self.bridge.speak(
-            self.preset["camera"], self.preset["message"], cache=True
+            self.preset["camera"],
+            self.preset["message"],
+            cache=True,
+            gain_db=self.preset.get("gain_db", 0),
         )

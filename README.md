@@ -15,6 +15,8 @@ The camera needs Two-Way Talk and enabled Live View. This initial release
 supports one bridge per Home Assistant instance. The bridge plays one
 clip at a time, with a limit of 17 seconds. Saved presets use Home
 Assistant's TTS cache. Dynamic messages are generated on demand.
+For quiet presets, edit the message and set a volume boost from 0 to 18 dB.
+A limiter caps peaks, so the audible increase can be less than the selected gain.
 
 ## Automations
 

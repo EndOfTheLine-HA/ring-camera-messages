@@ -99,6 +99,7 @@ class PresetOptions(config_entries.OptionsFlow):
             vol.Required("name"): vol.All(str, vol.Length(min=1, max=80)),
             vol.Required("camera"): vol.In(cameras),
             vol.Required("message"): vol.All(str, vol.Length(min=1, max=MAX_TEXT)),
+            vol.Optional("gain_db", default=0): vol.All(int, vol.Range(min=0, max=18)),
         })
         return self.async_show_form(
             step_id=step,
