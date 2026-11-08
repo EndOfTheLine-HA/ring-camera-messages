@@ -1,0 +1,12 @@
+{
+  "domain": "ring_camera_messages",
+  "name": "Ring Camera Messages",
+  "codeowners": ["@endoftheline818"],
+  "config_flow": true,
+  "dependencies": ["mqtt", "tts"],
+  "documentation": "https://github.com/EndOfTheLine-HA/ring-camera-messages",
+  "integration_type": "service",
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/EndOfTheLine-HA/ring-camera-messages/issues",
+  "version": "0.1.0"
+}

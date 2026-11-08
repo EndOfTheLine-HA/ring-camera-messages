@@ -1,0 +1,25 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Ring-MQTT",
+        "data": {"prefix": "Ring-MQTT topic prefix", "engine": "Text-to-speech provider"}
+      }
+    },
+    "error": {
+      "invalid_prefix": "Enter a valid MQTT topic prefix.",
+      "bridge_unavailable": "No cameras replied. Check that the bridge is running and playback requests are enabled."
+    },
+    "abort": {"already_configured": "Ring Camera Messages is already configured."}
+  },
+  "options": {
+    "step": {
+      "init": {"menu_options": {"add": "Add message", "edit": "Edit message", "remove": "Remove message"}},
+      "add": {"title": "Add message", "data": {"name": "Button name", "camera": "Camera", "message": "Message"}},
+      "message": {"title": "Edit message", "data": {"name": "Button name", "camera": "Camera", "message": "Message"}},
+      "edit": {"title": "Select a message to edit", "data": {"preset": "Message"}},
+      "remove": {"title": "Select a message to remove", "data": {"preset": "Message"}}
+    },
+    "abort": {"bridge_unavailable": "No cameras replied. Check the bridge and MQTT."}
+  }
+}

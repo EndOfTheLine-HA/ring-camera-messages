@@ -1,0 +1,18 @@
+speak:
+  name: Speak through Ring camera
+  description: Generate a voice message and play it through a Ring camera.
+  fields:
+    camera:
+      name: Camera ID
+      description: Stable camera ID returned by the List cameras action.
+      required: true
+      selector:
+        text:
+    message:
+      name: Message
+      required: true
+      selector:
+        text:
+cameras:
+  name: List cameras
+  description: Return the camera IDs and names reported by Ring-MQTT.

@@ -1,0 +1,24 @@
+alias: Ring camera greeting from Frigate
+triggers:
+  - trigger: mqtt
+    topic: frigate/tracked_object_update
+variables:
+  names:
+    alex: Alex
+  event: "{{ trigger.payload_json | default({}) }}"
+  name: "{{ names.get(event.name | default('', true) | lower, '') }}"
+conditions:
+  - condition: template
+    value_template: >-
+      {{ event.type | default('') == 'face'
+         and event.camera | default('') == 'example_front_door'
+         and event.score | default(0) | float(0) >= 0.90
+         and name != '' }}
+actions:
+  - action: ring_camera_messages.speak
+    data:
+      camera: "123456789"
+      message: "Welcome home, {{ name }}."
+  - delay: "00:01:00"
+mode: single
+max_exceeded: silent
