@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Ring Camera Messages</title>
+  <rect x="4" y="4" width="248" height="248" rx="56" fill="#1d2330"/>
+  <rect x="43" y="34" width="92" height="188" rx="27" fill="#303b50" stroke="#12cfee" stroke-width="6"/>
+  <rect x="53" y="44" width="72" height="90" rx="19" fill="#111722"/>
+  <circle cx="89" cy="85" r="25" fill="#26354a" stroke="#12cfee" stroke-width="5"/>
+  <circle cx="89" cy="85" r="13" fill="#111722"/>
+  <circle cx="84" cy="80" r="4" fill="#b4f6ff"/>
+  <path d="M81 121h16" stroke="#53647e" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="89" cy="175" r="18" fill="#1d2330" stroke="#12cfee" stroke-width="5"/>
+  <circle cx="89" cy="175" r="7" fill="#12cfee"/>
+  <g fill="none" stroke="#d0a5fa" stroke-width="8" stroke-linecap="round">
+    <path d="M154 110a27 27 0 0 1 0 36"/>
+    <path d="M172 95a49 49 0 0 1 0 66"/>
+    <path d="M190 80a72 72 0 0 1 0 96"/>
+  </g>
+</svg>
