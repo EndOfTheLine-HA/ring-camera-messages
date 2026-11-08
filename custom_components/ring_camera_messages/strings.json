@@ -15,8 +15,8 @@
   "options": {
     "step": {
       "init": {"menu_options": {"add": "Add message", "edit": "Edit message", "remove": "Remove message"}},
-      "add": {"title": "Add message", "data": {"name": "Button name", "camera": "Camera", "message": "Message"}},
-      "message": {"title": "Edit message", "data": {"name": "Button name", "camera": "Camera", "message": "Message"}},
+      "add": {"title": "Add message", "data": {"name": "Button name", "camera": "Camera", "message": "Message", "gain_db": "Volume boost (dB, 0–18)"}},
+      "message": {"title": "Edit message", "data": {"name": "Button name", "camera": "Camera", "message": "Message", "gain_db": "Volume boost (dB, 0–18)"}},
       "edit": {"title": "Select a message to edit", "data": {"preset": "Message"}},
       "remove": {"title": "Select a message to remove", "data": {"preset": "Message"}}
     },

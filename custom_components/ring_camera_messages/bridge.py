@@ -4,6 +4,7 @@ import asyncio
 import base64
 import io
 import json
+import subprocess
 import wave
 from uuid import uuid4
 
@@ -16,7 +17,7 @@ MAX_TEXT = 240
 MAX_FRAMES = 17 * 48000
 
 
-def stereo_wave(audio: bytes) -> bytes:
+def stereo_wave(audio: bytes, gain_db: int = 0) -> bytes:
     """Write canonical PCM with identical full-level channels."""
     output = io.BytesIO()
     try:
@@ -35,6 +36,20 @@ def stereo_wave(audio: bytes) -> bytes:
                 raise HomeAssistantError("Incomplete speech audio")
     except (EOFError, wave.Error) as err:
         raise HomeAssistantError("Could not read the TTS audio as WAV") from err
+
+    if gain_db:
+        try:
+            frames = subprocess.run(
+                [
+                    "ffmpeg", "-nostdin", "-v", "error",
+                    "-f", "s16le", "-ar", "48000", "-ac", "1", "-i", "pipe:0",
+                    "-af", f"volume={gain_db}dB,alimiter=limit=0.84:attack=2:release=22:level=false:latency=true",
+                    "-f", "s16le", "pipe:1",
+                ],
+                input=frames, capture_output=True, check=True, timeout=10,
+            ).stdout
+        except (OSError, subprocess.SubprocessError) as err:
+            raise HomeAssistantError("Could not apply the message volume boost") from err
 
     stereo = bytearray(len(frames) * 2)
     stereo[0::4] = stereo[2::4] = frames[0::2]
@@ -107,7 +122,7 @@ class Bridge:
         self.prefix = prefix
         self.engine = engine
 
-    async def speak(self, camera, text, *, cache=False):
+    async def speak(self, camera, text, *, cache=False, gain_db=0):
         text = text.strip()
         if not 1 <= len(text) <= MAX_TEXT:
             raise HomeAssistantError(f"Message must be 1 to {MAX_TEXT} characters")
@@ -129,7 +144,7 @@ class Bridge:
         except (TimeoutError, ValueError) as err:
             raise HomeAssistantError("Could not generate the speech audio") from err
         encoded = await self.hass.async_add_executor_job(
-            lambda: base64.b64encode(stereo_wave(audio)).decode("ascii")
+            lambda: base64.b64encode(stereo_wave(audio, gain_db)).decode("ascii")
         )
         result = await request(
             self.hass, self.prefix, "play", {"camera": camera, "audio": encoded}
