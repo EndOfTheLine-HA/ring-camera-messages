@@ -6,11 +6,10 @@ and video doorbells. Home Assistant turns your text into audio using your
 chosen text-to-speech provider. Ring-MQTT receives that audio over MQTT and
 plays it through the camera you select.
 
-**A running, compatible Ring-MQTT bridge is required before setup.** HACS
-installs the Home Assistant integration. Install and configure Ring-MQTT
+**A running, compatible Ring-MQTT bridge is required before setup.** The Home Assistant Marketplace
+installs this integration. Install and configure Ring-MQTT
 separately using a build that includes the speaker playback request feature.
-[Compatible Ring-MQTT source](https://github.com/endoftheline818/ring-mqtt/tree/64cefa54e863d4bb4a1a89d2d9024018003f84c4)
-· [Speaker playback request PR](https://github.com/endoftheline818/ring-mqtt/pull/3)
+[Download the compatible Ring-MQTT Speaker Bridge](https://github.com/EndOfTheLine-HA/ring-mqtt-speaker/releases/tag/v0.1.0).
 
 ## What you can do
 
@@ -32,9 +31,10 @@ Playback has been tested on a Ring Doorbell Pro and a Floodlight Cam Pro.
 
 - **Ring-MQTT** running and authenticated to Ring, with camera support enabled
   and `"enable_speaker_requests": true` in its standalone configuration.
-  Use a build containing the linked change and restart Ring-MQTT after enabling it.
-- **Home Assistant 2026.11.0 or newer**, with HACS for installation and a
-  configured text-to-speech entity.
+  Install the linked standalone Docker build and restart Ring-MQTT after enabling the option.
+- **Home Assistant 2026.11.0 or newer**, with Marketplace access and a
+  configured text-to-speech entity. The optional preset volume boost uses
+  the FFmpeg executable on the Home Assistant host.
 - **A shared MQTT broker** connected to both Home Assistant and Ring-MQTT.
   Restrict write access to `<ring_topic>/speaker/v1/play` to trusted publishers.
   A maximum-length clip needs an MQTT payload allowance of about 4.36 MB.
@@ -43,8 +43,9 @@ Playback has been tested on a Ring Doorbell Pro and a Floodlight Cam Pro.
 
 ## Install
 
-1. Add this repository in HACS as a custom repository of type **Integration**,
-   install it, and restart Home Assistant.
+1. Open **Settings > Marketplace > Add from link** and enter
+   `EndOfTheLine-HA/ring-camera-messages`. Choose **Integration** if prompted.
+   Open the repository, install it, and restart Home Assistant.
 2. Go to **Settings → Devices & services → Add integration → Ring Camera Messages**.
    Select your text-to-speech entity and enter the Ring-MQTT topic prefix,
    usually `ring`.
@@ -53,7 +54,7 @@ Playback has been tested on a Ring Doorbell Pro and a Floodlight Cam Pro.
 
 ## Visual setup
 
-After installing through HACS and restarting Home Assistant, open
+After installing through the Marketplace and restarting Home Assistant, open
 **Settings → Devices & services → Add integration → Ring Camera Messages**.
 
 1. In **Connect Ring-MQTT**, keep the topic prefix as `ring` unless you changed
