@@ -1,22 +1,55 @@
 # Ring Camera Messages
 
-Play text-to-speech messages through Ring camera speakers from Home Assistant.
-Save reusable messages as buttons or generate a message in an automation.
+Ring Camera Messages is a Home Assistant custom integration for sending your
+own spoken messages through the built-in speakers on compatible Ring cameras
+and video doorbells. Home Assistant turns your text into audio using your
+chosen text-to-speech provider. Ring-MQTT receives that audio over MQTT and
+plays it through the camera you select.
+
+**A running, compatible Ring-MQTT bridge is required before setup.** HACS
+installs the Home Assistant integration. Install and configure Ring-MQTT
+separately using a build that includes the speaker playback request feature.
+[Compatible Ring-MQTT source](https://github.com/endoftheline818/ring-mqtt/tree/64cefa54e863d4bb4a1a89d2d9024018003f84c4)
+· [Speaker playback request PR](https://github.com/endoftheline818/ring-mqtt/pull/3)
+
+## What you can do
+
+- **Save messages as buttons.** Create several messages and choose a camera
+  for each one. Put a delivery thank-you on the Front Door dashboard or send
+  “Stop barking” through a side-yard camera.
+- **Speak from an automation.** Call `ring_camera_messages.speak` with a camera
+  ID and text. A Frigate-triggered Home Assistant automation can use a face
+  recognition event to say “Welcome home, Alex” or play a preset after an audio
+  or object detection.
+- **Adjust quiet presets.** Set a volume boost from 0 to 18 dB per saved message.
+  A peak limiter caps the signal, so the audible increase may be smaller.
+
+One Home Assistant instance connects to one bridge, which can serve multiple
+cameras. The bridge plays one clip at a time, up to 17 seconds per clip.
+Playback has been tested on a Ring Doorbell Pro and a Floodlight Cam Pro.
+
+## Prerequisites
+
+- **Ring-MQTT** running and authenticated to Ring, with camera support enabled
+  and `"enable_speaker_requests": true` in its standalone configuration.
+  Use a build containing the linked change and restart Ring-MQTT after enabling it.
+- **Home Assistant 2026.11.0 or newer**, with HACS for installation and a
+  configured text-to-speech entity.
+- **A shared MQTT broker** connected to both Home Assistant and Ring-MQTT.
+  Restrict write access to `<ring_topic>/speaker/v1/play` to trusted publishers.
+  A maximum-length clip needs an MQTT payload allowance of about 4.36 MB.
+- **A Ring camera or video doorbell** with Two-Way Talk and Live View enabled.
+  Frigate is optional and is needed only for automations that use its events.
 
 ## Install
 
-1. Use a Ring-MQTT build with the [speaker request protocol](https://github.com/endoftheline818/ring-mqtt/pull/3). Set `"enable_speaker_requests": true` in its standalone configuration and restart the bridge.
-2. Connect Home Assistant and Ring-MQTT to the same MQTT broker. Only trusted publishers should have write access to the bridge's `<ring_topic>/speaker/v1/play` topic. For maximum-length clips the broker must accept an MQTT payload of about 4.36 MB.
-3. Add this repository in HACS as a custom repository of type **Integration**, install it and restart Home Assistant.
-4. Go to **Settings → Devices & services → Add integration → Ring Camera Messages**. Select an installed TTS entity and enter the bridge's topic prefix, usually `ring`.
-5. Open the integration's **Configure** menu to add, edit or remove messages. Each message has its own text and camera. Add the resulting button entities to a dashboard.
-
-The camera needs Two-Way Talk and enabled Live View. This initial release
-supports one bridge per Home Assistant instance. The bridge plays one
-clip at a time, with a limit of 17 seconds. Saved presets use Home
-Assistant's TTS cache. Dynamic messages are generated on demand.
-For quiet presets, edit the message and set a volume boost from 0 to 18 dB.
-A limiter caps peaks, so the audible increase can be less than the selected gain.
+1. Add this repository in HACS as a custom repository of type **Integration**,
+   install it, and restart Home Assistant.
+2. Go to **Settings → Devices & services → Add integration → Ring Camera Messages**.
+   Select your text-to-speech entity and enter the Ring-MQTT topic prefix,
+   usually `ring`.
+3. Open **Configure → Add message** to create your first button. Test playback
+   from its entity before adding it to a dashboard.
 
 ## Visual setup
 
