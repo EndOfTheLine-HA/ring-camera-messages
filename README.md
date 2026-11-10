@@ -43,9 +43,10 @@ Playback has been tested on a Ring Doorbell Pro and a Floodlight Cam Pro.
 
 ## Install
 
-1. Open **Settings > Marketplace > Add from link** and enter
-   `EndOfTheLine-HA/ring-camera-messages`. Choose **Integration** if prompted.
-   Open the repository, install it, and restart Home Assistant.
+1. Open **Settings → Marketplace**, search for **Ring Camera Messages**, and
+   open its listing. Install the integration and restart Home Assistant.
+   If the listing is not available in search yet, use **Add from link** and
+   enter `EndOfTheLine-HA/ring-camera-messages`. Choose **Integration** if prompted.
 2. Go to **Settings → Devices & services → Add integration → Ring Camera Messages**.
    Select your text-to-speech entity and enter the Ring-MQTT topic prefix,
    usually `ring`.
